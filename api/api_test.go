@@ -1,12 +1,16 @@
 package api
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/drunknsorry/Tax-calculator/apiconsumer"
 )
 
+// Create test for Calculate Tax
 func TestCalculateTax(t *testing.T) {
+	// Assign mock data
 	data := &apiconsumer.TaxBracketResults{
 		TaxBrackets: []apiconsumer.Brackets{
 			{Min: 0, Max: 50000, Rate: 0.10},
@@ -20,13 +24,15 @@ func TestCalculateTax(t *testing.T) {
 
 	tax, taxesPerBand, salaryPerBand, effectiveTaxRate := CalculateTaxes(data, float64(year), float64(totalSalary))
 
-	expectedTaxesOwed := []float64{5000, 1250, 5000}
+	// Test output of taxes per band
+	expectedTaxesPerBand := []float64{5000, 1250, 5000}
 	for i := 0; i < len(taxesPerBand); i++ {
-		if taxesPerBand[i] != expectedTaxesOwed[i] {
-			t.Errorf("Expected Taxes Owed Per Band: %f, Got: %f", expectedTaxesOwed[i], taxesPerBand[i])
+		if taxesPerBand[i] != expectedTaxesPerBand[i] {
+			t.Errorf("Expected Taxes Owed Per Band: %f, Got: %f", expectedTaxesPerBand[i], taxesPerBand[i])
 		}
 	}
 
+	// Test outof of Salary per band
 	expectedSalaryPerBand := []float64{50000, 25000, 25000}
 	for i := 0; i < len(salaryPerBand); i++ {
 		if salaryPerBand[i] != expectedSalaryPerBand[i] {
@@ -34,13 +40,37 @@ func TestCalculateTax(t *testing.T) {
 		}
 	}
 
+	// Test output of effective tax rate
 	expectedEffectiveTaxRate := 0.11
 	if expectedEffectiveTaxRate != effectiveTaxRate {
 		t.Errorf("Expected Effective Tax Rate: %f, Got: %f", expectedEffectiveTaxRate, effectiveTaxRate)
 	}
 
+	// Test output of total tax
 	expectedTax := float64(11250)
 	if expectedTax != tax {
 		t.Errorf("Expected Total Tax: %f, Got: %f", expectedTax, tax)
 	}
+
+}
+
+func TestHome(t *testing.T) {
+	// Request home
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create mock response recorder
+	rr := httptest.NewRecorder()
+
+	// start a test server and set handler
+	handler := http.HandlerFunc(home)
+	handler.ServeHTTP(rr, req)
+
+	// Check status code
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("Expected status code: %v, got %v", http.StatusOK, status)
+	}
+
 }
