@@ -3,30 +3,20 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"math"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/drunknsorry/Tax-calculator/apiconsumer"
+	"github.com/drunknsorry/Tax-calculator/logger"
 )
 
-// Add a logger
-var logger *log.Logger
-
-// Start the logger, create, open or append data to end of file, chmod for read write to owner and group
-func loggerInit() {
-	logFile, err := os.OpenFile("log/api.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatal("Error opening log file:", err)
-	}
-	logger = log.New(logFile, "api: ", log.Ldate|log.Ltime|log.Lshortfile) // Using local day/time since it's easier rather than UTC
-}
+// Initiate logger
+var logagr = logger.LoggerInit("log/api.log", "api: ")
 
 // A function to instantiate the server
 func ServerStart() *http.ServeMux {
-	loggerInit()
+	//logagr := logger.LoggerInit("log/api.log", "api: ")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/gettax", routeGetTax)
@@ -73,7 +63,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	// Fetch data from api, if it fails return error
 	data, err := apiconsumer.FetchResults(yearStr)
 	if err != nil {
-		logger.Printf("Failed fetching tax brackets: %v", err)
+		logagr.Printf("Failed fetching tax brackets: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

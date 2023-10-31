@@ -1,0 +1,3 @@
+api: 2023/10/31 13:49:17 apiconsumer.go:49: Error making http request: http://0.0.0.0:5000/tax-calculator/tax-year/2019: Get "http://0.0.0.0:5000/tax-calculator/tax-year/2019": dial tcp 0.0.0.0:5000: connect: connection refused
+api: 2023/10/31 13:49:17 apiconsumer.go:38: Error fetching results: http://0.0.0.0:5000/tax-calculator/tax-year/2019: Get "http://0.0.0.0:5000/tax-calculator/tax-year/2019": dial tcp 0.0.0.0:5000: connect: connection refused
+api: 2023/10/31 13:49:17 api.go:78: Failed fetching tax brackets: Get "http://0.0.0.0:5000/tax-calculator/tax-year/2019": dial tcp 0.0.0.0:5000: connect: connection refused
