@@ -91,6 +91,9 @@ func CalculateTaxes(data *apiconsumer.TaxBracketResults, year, totalSalary float
 	salaryPerBand := make([]float64, len(data.TaxBrackets))
 
 	// Loop through slice of TaxBrackets
+	if totalSalary == 0.0 {
+		return 0, taxesPerBand, salaryPerBand, 0.0
+	}
 	for i, bracket := range data.TaxBrackets {
 		if totalSalary <= bracket.Min { // Continue to next loop if salary is lower than min
 			continue
