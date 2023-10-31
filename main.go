@@ -28,12 +28,6 @@ func main() {
 
 	loggerInit()
 
-	// a, err := apiconsumer.FetchResults("2022")
-	// if err != nil {
-	// 	fmt.Printf(err.Error())
-	// }
-	// fmt.Print(a)
-
 	fmt.Println("Starting server on http://localhost:4000")
 	logger.Printf("Starting server on http://localhost:4000")
 
