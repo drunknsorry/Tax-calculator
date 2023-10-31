@@ -2,7 +2,7 @@
 
 This is a basic get api implementation of a tax calculator which when provided a year and salary query, responds back with tax brackets, total tax, effective tax rate and related information.
 
-To use this project, please clone or checkout the repo and 
+To use this project, please clone or checkout the repo and run either `go build` and use the generated executable or `go run main.go`
 
 #### Api documentation can be found at: https://documenter.getpostman.com/view/30818865/2s9YXbARSe
 
