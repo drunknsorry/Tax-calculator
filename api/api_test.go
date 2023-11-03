@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/drunknsorry/Tax-calculator/apiconsumer"
@@ -52,6 +53,7 @@ func TestCalculateTax(t *testing.T) {
 		t.Errorf("Expected Total Tax: %f, Got: %f", expectedTax, tax)
 	}
 
+	os.RemoveAll("log")
 }
 
 func TestHome(t *testing.T) {
@@ -73,4 +75,5 @@ func TestHome(t *testing.T) {
 		t.Errorf("Expected status code: %v, got %v", http.StatusOK, status)
 	}
 
+	os.RemoveAll("log")
 }

@@ -3,10 +3,12 @@ package apiconsumer
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
 func TestGetJson(t *testing.T) {
+
 	// Start a mock http server and sample Json response
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -27,6 +29,9 @@ func TestGetJson(t *testing.T) {
 	if len(response.TaxBrackets) != 1 {
 		t.Error("Expected 1 tax bracket, but got a different number")
 	}
+
+	// Clean up any log folders created
+	os.RemoveAll("log")
 
 }
 
