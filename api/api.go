@@ -11,12 +11,8 @@ import (
 	"github.com/drunknsorry/Tax-calculator/logger"
 )
 
-// Initiate logger
-var logagr = logger.LoggerInit("log/api.log", "api: ")
-
 // A function to instantiate the server
 func ServerStart() *http.ServeMux {
-	//logagr := logger.LoggerInit("log/api.log", "api: ")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/gettax", routeGetTax)
@@ -63,7 +59,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	// Fetch data from api, if it fails return error
 	data, err := apiconsumer.FetchResults(yearStr)
 	if err != nil {
-		logagr.Printf("Failed fetching tax brackets: %v", err)
+		logger.ApiLogger.Printf("Failed fetching tax brackets: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

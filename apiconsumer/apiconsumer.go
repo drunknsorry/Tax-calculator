@@ -8,9 +8,6 @@ import (
 	"github.com/drunknsorry/Tax-calculator/logger"
 )
 
-// Initiate logger
-var logagr = logger.LoggerInit("log/api.log", "api: ")
-
 // Setting client
 var client http.Client
 
@@ -35,7 +32,7 @@ func FetchResults(year string) (*TaxBracketResults, error) {
 	url := ApiUrl + year
 	err := GetJson(url, &response)
 	if err != nil {
-		logagr.Printf("Error fetching results: %s: %v", url, err)
+		logger.ApiConsumerLogger.Printf("Error fetching results: %s: %v", url, err)
 		return nil, err
 	}
 	return &response, nil
@@ -46,7 +43,7 @@ func FetchResults(year string) (*TaxBracketResults, error) {
 func GetJson(url string, resp interface{}) error {
 	r, err := client.Get(url)
 	if err != nil {
-		logagr.Printf("Error making http request: %s: %v", url, err)
+		logger.ApiConsumerLogger.Printf("Error making http request: %s: %v", url, err)
 		return err
 	}
 
@@ -55,13 +52,13 @@ func GetJson(url string, resp interface{}) error {
 
 	// Check for non 200 HTTP status codes
 	if r.StatusCode == http.StatusNotFound {
-		logagr.Printf("%s does not exist", url)
+		logger.ApiConsumerLogger.Printf("%s does not exist", url)
 		return errors.New("HTTP 404 - Year data not found for your request, please try an accepted value")
 	} else if r.StatusCode == http.StatusInternalServerError {
-		logagr.Printf("%s experienced an internal server error", url)
+		logger.ApiConsumerLogger.Printf("%s experienced an internal server error", url)
 		return errors.New("HTTP 500 - We've encountered an error, please try again later")
 	} else if r.StatusCode != http.StatusOK {
-		logagr.Printf("%s experienced an error", url)
+		logger.ApiConsumerLogger.Printf("%s experienced an error", url)
 		return errors.New("we've encountered an error, please try again later or contact us")
 	}
 

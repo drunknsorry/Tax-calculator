@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetJson(t *testing.T) {
+
 	// Start a mock http server and sample Json response
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
