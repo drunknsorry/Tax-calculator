@@ -18,21 +18,15 @@ var ApiConsumerLogger *log.Logger
 // Add a Server logger
 var ServerLogger *log.Logger
 
-// Start the logger, create, open or append data to end of file, chmod for read write to owner and group
-// func LoggerInit(file string, logPrefix string) *log.Logger {
-// 	logFile, err := os.OpenFile(file, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-// 	if err != nil {
-// 		log.Fatal("Error opening log file:", err)
-// 	}
-// 	Logger = log.New(logFile, "api: ", log.Ldate|log.Ltime|log.Lshortfile) // Using local day/time since it's easier rather than UTC
-// 	return Logger
-
-// }
-
 func init() {
-	dir, err := filepath.Abs("../log")
+	dir, err := filepath.Abs("./log")
 	if err != nil {
 		log.Fatal("Error finding log folder or filepath")
+	}
+
+	// Check if directory exists, if not create it
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		os.MkdirAll(dir, os.ModePerm)
 	}
 
 	// Hard coding each logger file, need to find a better implementation that's dynamic and scalable

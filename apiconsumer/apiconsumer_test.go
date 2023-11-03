@@ -3,6 +3,7 @@ package apiconsumer
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
@@ -28,6 +29,9 @@ func TestGetJson(t *testing.T) {
 	if len(response.TaxBrackets) != 1 {
 		t.Error("Expected 1 tax bracket, but got a different number")
 	}
+
+	// Clean up any log folders created
+	os.RemoveAll("log")
 
 }
 
