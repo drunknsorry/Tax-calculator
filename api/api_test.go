@@ -33,7 +33,7 @@ func TestCalculateTax(t *testing.T) {
 		}
 	}
 
-	// Test outof of Salary per band
+	// Test output of Salary per band
 	expectedSalaryPerBand := []float64{50000, 25000, 25000}
 	for i := 0; i < len(salaryPerBand); i++ {
 		if salaryPerBand[i] != expectedSalaryPerBand[i] {
@@ -75,5 +75,6 @@ func TestHome(t *testing.T) {
 		t.Errorf("Expected status code: %v, got %v", http.StatusOK, status)
 	}
 
+	// Clean up any log folders created
 	os.RemoveAll("log")
 }
