@@ -1,9 +1,11 @@
 package logger
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 // Add a logger
@@ -19,6 +21,10 @@ var ApiConsumerLogger *log.Logger
 var ServerLogger *log.Logger
 
 func init() {
+
+	currentTime := time.Now()
+	fmt.Print(currentTime)
+
 	dir, err := filepath.Abs("./log")
 	if err != nil {
 		log.Fatal("Error finding log folder or filepath")
@@ -30,9 +36,9 @@ func init() {
 	}
 
 	// Hard coding each logger file, need to find a better implementation that's dynamic and scalable
-	apiLogFile, apiErr := os.OpenFile(dir+"/api.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	apiConsumerLogFile, apiConsumerErr := os.OpenFile(dir+"/apiconsumer.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	serverLogFile, serverErr := os.OpenFile(dir+"/server.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	apiLogFile, apiErr := os.OpenFile(dir+"/api-"+currentTime.Format("2006-01-02")+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	apiConsumerLogFile, apiConsumerErr := os.OpenFile(dir+"/apiconsumer-"+currentTime.Format("2006-01-02")+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	serverLogFile, serverErr := os.OpenFile(dir+"/server-"+currentTime.Format("2006-01-02")+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 
 	if apiErr != nil || apiConsumerErr != nil || serverErr != nil {
 		log.Fatal("Error opening log file:", apiErr, apiConsumerErr, serverErr)
