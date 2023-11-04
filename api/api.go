@@ -27,6 +27,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 // Define getTax route and it's logic
 func routeGetTax(w http.ResponseWriter, r *http.Request) {
+
+	// Reject all unsupported methods
+	if r.Method != http.MethodGet {
+		http.Error(w, "Unsupported Method", http.StatusBadRequest)
+		return
+	}
+
 	yearStr := r.URL.Query().Get("year")
 	totalSalaryStr := r.URL.Query().Get("salary")
 
