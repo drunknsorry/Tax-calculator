@@ -6,14 +6,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/drunknsorry/Tax-calculator/apiconsumer"
+	"github.com/drunknsorry/Tax-calculator/models"
 )
 
 // Create test for Calculate Tax
 func TestCalculateTax(t *testing.T) {
 	// Assign mock data
-	data := &apiconsumer.TaxBracketResults{
-		TaxBrackets: []apiconsumer.Brackets{
+	data := &models.TaxBracketResults{
+		TaxBrackets: []models.Brackets{
 			{Min: 0, Max: 50000, Rate: 0.10},
 			{Min: 50000, Max: 75000, Rate: 0.05},
 			{Min: 75000, Max: 100000, Rate: 0.20},

@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"github.com/drunknsorry/Tax-calculator/models"
 )
 
 func TestGetJson(t *testing.T) {
@@ -17,7 +19,7 @@ func TestGetJson(t *testing.T) {
 	defer server.Close()
 
 	// Call GetJson
-	var response TaxBracketResults
+	var response models.TaxBracketResults
 	err := GetJson(server.URL, &response)
 
 	// Check for errors

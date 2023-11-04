@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/drunknsorry/Tax-calculator/logger"
+	"github.com/drunknsorry/Tax-calculator/models"
 )
 
 // Setting client
@@ -14,21 +15,9 @@ var client http.Client
 // Api url
 var ApiUrl = "http://0.0.0.0:5000/tax-calculator/tax-year/"
 
-// Struct defining the data structure for the json payload
-type TaxBracketResults struct {
-	TaxBrackets []Brackets `json:"tax_brackets"`
-}
-
-// Struct defining the slice inside of TaxBrackets from TaxBracketResults
-type Brackets struct {
-	Max  float64 `json:"max"`
-	Min  float64 `json:"min"`
-	Rate float64 `json:"rate"`
-}
-
 // Fetch results or error from URL
-func FetchResults(year string) (*TaxBracketResults, error) {
-	var response TaxBracketResults
+func FetchResults(year string) (*models.TaxBracketResults, error) {
+	var response models.TaxBracketResults
 	url := ApiUrl + year
 	err := GetJson(url, &response)
 	if err != nil {

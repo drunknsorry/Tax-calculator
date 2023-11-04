@@ -9,6 +9,7 @@ import (
 
 	"github.com/drunknsorry/Tax-calculator/apiconsumer"
 	"github.com/drunknsorry/Tax-calculator/logger"
+	"github.com/drunknsorry/Tax-calculator/models"
 )
 
 // A function to instantiate the server
@@ -74,12 +75,13 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	// Calculate taxes and assign to variables so a map can be created
 	tax, taxesPerBand, salaryPerBand, effectiveTaxRate := CalculateTaxes(data, float64(year), float64(totalSalary))
 
-	response := map[string]interface{}{
-		"Salary":              totalSalary,
-		"Total Taxes Owed":    tax,
-		"Taxes Per Band":      taxesPerBand,
-		"Salary Per Tax Band": salaryPerBand,
-		"Effective Tax Rate":  effectiveTaxRate,
+	// Model response into a struct to pass on to json encoder
+	response := models.TaxResponse{
+		Salary:           totalSalary,
+		TotalTaxesOwed:   tax,
+		TaxesPerBand:     taxesPerBand,
+		SalaryPerTaxBand: salaryPerBand,
+		EffectiveTaxRate: effectiveTaxRate,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -88,7 +90,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 }
 
 // Calculate taxes and return output data, round floats to 2 digits
-func CalculateTaxes(data *apiconsumer.TaxBracketResults, year, totalSalary float64) (float64, []float64, []float64, float64) {
+func CalculateTaxes(data *models.TaxBracketResults, year, totalSalary float64) (float64, []float64, []float64, float64) {
 	tax := 0.0
 	taxesPerBand := make([]float64, len(data.TaxBrackets))
 	salaryPerBand := make([]float64, len(data.TaxBrackets))
