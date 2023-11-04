@@ -3,13 +3,13 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"net/http"
 	"strconv"
 
 	"github.com/drunknsorry/Tax-calculator/apiconsumer"
 	"github.com/drunknsorry/Tax-calculator/logger"
 	"github.com/drunknsorry/Tax-calculator/models"
+	"github.com/drunknsorry/Tax-calculator/taxes"
 )
 
 // A function to instantiate the server
@@ -73,7 +73,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Calculate taxes and assign to variables so a map can be created
-	tax, taxesPerBand, salaryPerBand, effectiveTaxRate := CalculateTaxes(data, float64(year), float64(totalSalary))
+	tax, taxesPerBand, salaryPerBand, effectiveTaxRate := taxes.CalculateTaxes(data, float64(year), float64(totalSalary))
 
 	// Model response into a struct to pass on to json encoder
 	response := models.TaxResponse{
@@ -87,33 +87,4 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 
-}
-
-// Calculate taxes and return output data, round floats to 2 digits
-func CalculateTaxes(data *models.TaxBracketResults, year, totalSalary float64) (float64, []float64, []float64, float64) {
-	tax := 0.0
-	taxesPerBand := make([]float64, len(data.TaxBrackets))
-	salaryPerBand := make([]float64, len(data.TaxBrackets))
-
-	// Loop through slice of TaxBrackets
-	if totalSalary == 0.0 {
-		return 0, taxesPerBand, salaryPerBand, 0.0
-	}
-	for i, bracket := range data.TaxBrackets {
-		if totalSalary <= bracket.Min { // Continue to next loop if salary is lower than min
-			continue
-		}
-		if totalSalary >= bracket.Max && bracket.Max != 0.0 { // If salary is greater than max and max is not zero, do (max - min) * bracket tax rate
-			salaryPerBand[i] = (bracket.Max - bracket.Min)
-			taxesPerBand[i] = math.Round(((bracket.Max-bracket.Min)*bracket.Rate)*100) / 100
-		} else {
-			salaryPerBand[i] = (totalSalary - bracket.Min)
-			taxesPerBand[i] = math.Round(((totalSalary-bracket.Min)*bracket.Rate)*100) / 100 // If salary is less than max, do (salary - min) * bracket tax rate
-		}
-		tax += taxesPerBand[i]
-	}
-
-	effectiveTaxRate := math.Round((tax/totalSalary)*100) / 100
-	tax = math.Round(tax*100) / 100
-	return tax, taxesPerBand, salaryPerBand, effectiveTaxRate
 }
