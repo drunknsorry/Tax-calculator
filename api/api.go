@@ -22,15 +22,17 @@ func ServerStart() *http.ServeMux {
 
 // Define home route
 func home(w http.ResponseWriter, r *http.Request) {
+	logger.ApiLogger.Printf("requested: %v", r.RequestURI)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, "Welcome to the Tax Calculator API. Visit https://documenter.getpostman.com/view/30818865/2s9YXbARSe for Api documentation.")
 }
 
 // Define getTax route and it's logic
 func routeGetTax(w http.ResponseWriter, r *http.Request) {
-
+	logger.ApiLogger.Printf("requested: %v", r.RequestURI)
 	// Reject all unsupported methods
 	if r.Method != http.MethodGet {
+		logger.ApiLogger.Printf("Unsupported Method: %v", r.Method)
 		http.Error(w, "Unsupported Method", http.StatusBadRequest)
 		return
 	}
@@ -40,11 +42,13 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 
 	// Check if year and salary values are empty, return error if they are
 	if yearStr == "" {
+		logger.ApiLogger.Printf("Year value not provided %v", yearStr)
 		http.Error(w, "Year value not provided", http.StatusBadRequest)
 		return
 	}
 
 	if totalSalaryStr == "" {
+		logger.ApiLogger.Printf("Salary value not provided %v", totalSalaryStr)
 		http.Error(w, "Salary value not provided", http.StatusBadRequest)
 		return
 	}
@@ -53,6 +57,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	totalSalary, errSalary := strconv.ParseFloat(totalSalaryStr, 64)
 
 	if errSalary != nil {
+		logger.ApiLogger.Printf("Invalid salary value: %v", totalSalaryStr)
 		http.Error(w, "Invalid salary value", http.StatusBadRequest)
 		return
 	}
@@ -60,6 +65,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	year, errYear := strconv.ParseFloat(yearStr, 64)
 
 	if errYear != nil {
+		logger.ApiLogger.Printf("Invalid year value: %v", yearStr)
 		http.Error(w, "Invalid year value", http.StatusBadRequest)
 		return
 	}
@@ -68,7 +74,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	data, err := apiconsumer.FetchResults(yearStr)
 	if err != nil {
 		logger.ApiLogger.Printf("Failed fetching tax brackets: %v", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Failed fetching tax brackets, please try again later", http.StatusInternalServerError)
 		return
 	}
 
