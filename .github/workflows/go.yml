@@ -6,6 +6,8 @@ name: Go
 on:
   push:
     branches: [ "master" ]
+  push:
+    branches: [ "develop" ]
   pull_request:
     branches: [ "master" ]
 

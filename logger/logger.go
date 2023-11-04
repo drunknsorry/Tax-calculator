@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -23,7 +22,6 @@ var ServerLogger *log.Logger
 func init() {
 
 	currentTime := time.Now()
-	fmt.Print(currentTime)
 
 	dir, err := filepath.Abs("./log")
 	if err != nil {
