@@ -30,6 +30,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 // Define getTax route and it's logic
 func routeGetTax(w http.ResponseWriter, r *http.Request) {
 	logger.ApiLogger.Printf("requested: %v", r.RequestURI)
+
 	// Reject all unsupported methods
 	if r.Method != http.MethodGet {
 		logger.ApiLogger.Printf("Unsupported Method: %v", r.Method)
@@ -64,7 +65,7 @@ func routeGetTax(w http.ResponseWriter, r *http.Request) {
 
 	year, errYear := strconv.ParseFloat(yearStr, 64)
 
-	if errYear != nil {
+	if errYear != nil || year < 2019 || year > 2022 {
 		logger.ApiLogger.Printf("Invalid year value: %v", yearStr)
 		http.Error(w, "Invalid year value", http.StatusBadRequest)
 		return
