@@ -7,9 +7,6 @@ import (
 	"time"
 )
 
-// Add a logger
-// var Logger *log.Logger
-
 // Add an Api logger
 var ApiLogger *log.Logger
 
